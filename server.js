@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 const swaggerjsDoc = require('swagger-jsdoc')
 const swaggerui = require('swagger-ui-express')
 const userdb = require('./server/model/model')
-
+const students = require('./server/model/student-model')
 const app = express()
 
 const options ={
@@ -22,7 +22,7 @@ const options ={
         }],
        
     },
-    apis: ["./server/router/router.js"]
+    apis: ["./server/router/router.js","./server/router/student-router.js"]
 }
 
 const specs = swaggerjsDoc(options)
@@ -36,6 +36,7 @@ app.use(morgan('tiny'))
 
 
 //mongodb connection
+
 const DB = process.env.DATABASE.replace(
     '<PASSWORD>',
     process.env.DATABASE_PASSWORD
@@ -47,10 +48,10 @@ const connectDB = async()=>{
             useNewUrlParser :true,
               
         })
-        console.log(`mongodb conneccted : ${con.connection.host}`)
+        console.log(`mongodb connected : ${con.connection.host}`)
     }
     catch(err){
-        console.log(err)
+        console.lo("failed the connection")
         process.exit(1)
     }
 }
@@ -69,7 +70,8 @@ app.use(bodyparser.json())
 
 //route
 
-app.use('/',require('./server/router/router'))
+app.use('/api/teachers',require('./server/router/router'))
+app.use('/api/students',require('./server/router/student-router'))
 
 
  
