@@ -16,19 +16,23 @@ const controller =  require('../controller/student-controller')
  * @swagger
  * components:
  *      schemas:
- *          Teachers:
+ *          Students:
  *              type: object
  *              required:
- *                  - id
+ *                  - rollnumber
  *                  - name
+ *                  - class
  *                  - email
  *                  - phone
  *                  - Address
+ *                  
  *    
  *              properties:
- *                  id:
- *                      type: integer
+ *                  rollnumber:
+ *                      type: string
  *                  name:
+ *                      type: string
+ *                  class:
  *                      type: string
  *                  email:
  *                      type: string
@@ -43,7 +47,7 @@ const controller =  require('../controller/student-controller')
  * @swagger
  * /api/students:
  *  get:
- *     description:  get all the teachers
+ *     description:  get all the Students
  *     responses:
  *      200:
  *         description: list of teachers
@@ -52,7 +56,7 @@ const controller =  require('../controller/student-controller')
  *                   schema:
  *                      type: array
  *                      items:
- *                          $ref: '#/components/schemas/Teachers'     
+ *                          $ref: '#/components/schemas/Students'     
  */
 
 
@@ -61,7 +65,7 @@ const controller =  require('../controller/student-controller')
  * @swagger
  * /api/students/{id}:
  *  get:
- *     description:  get all the teachers
+ *     description:  get all the students details
  *    
  *     parameters:
  *          - in: path
@@ -69,14 +73,14 @@ const controller =  require('../controller/student-controller')
  *            schema:
  *              type: string
  *              required: true
- *              description: The teacher id
+ *              description: The student id
  *     responses:
  *          200:
- *              description: list of teachers
+ *              description: list of students
  *              content:
  *                  application/json:
  *                       schema:
- *                          $ref: '#/components/schemas/Teachers'     
+ *                          $ref: '#/components/schemas/Students'     
  */
 
 
@@ -85,22 +89,28 @@ const controller =  require('../controller/student-controller')
  * @swagger
  * /api/students/selects/{select}:
  *  get:
- *     description:  get all the teachers by active/inactive/name/subject
- *    
+ *     description: get all the students by rollnumber
  *     parameters:
  *          - in: path
  *            name: select
  *            schema:
  *              type: string
  *              required: true
- *              description: The teachers that are active or inactive                    
+ *              description: list of students 
+ * 
+ *          - in: query
+ *            name: page
+ *            schema:
+ *              type: integer
+ *              required: true
+ *                                
  *     responses:
  *          200:
- *              description: list of teachers
+ *              description: list of students
  *              content:
  *                  application/json:
  *                       schema:
- *                          $ref: '#/components/schemas/Teachers'     
+ *                          $ref: '#/components/schemas/Students'     
  */
 
 
@@ -109,16 +119,16 @@ const controller =  require('../controller/student-controller')
  * @swagger
  * /api/students:
  *  post:
- *     description:  create teacher details
+ *     description:  create students details
  *     requestBody:
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#/components/schemas/Teachers'
+ *                      $ref: '#/components/schemas/Students'
  * 
  *     responses:
  *          200:
- *              description: list of teachers
+ *              description: list of students
  *              
  */
 
@@ -127,7 +137,7 @@ const controller =  require('../controller/student-controller')
  * @swagger
  * /api/students/update/{id}:
  *  put:
- *     description:  update details of  teachers 
+ *     description:  update details of  student
  *    
  *     parameters:
  *          - in: path
@@ -140,21 +150,21 @@ const controller =  require('../controller/student-controller')
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#/components/schemas/Teachers'
+ *                      $ref: '#/components/schemas/Students'
  *     responses:
  *          200:
- *              description: updated the details of teacher
+ *              description: updated the details of student
  *              content:
  *                  application/json:
  *                       schema:
- *                          $ref: '#/components/schemas/Teachers'     
+ *                          $ref: '#/components/schemas/Students'     
  */
 
 /**
  * @swagger
  * /api/students/delete/{id}:
  *  delete:
- *     description:  Delete the details of a teacher by Id
+ *     description:  Delete the details of a student by Id
  *    
  *     parameters:
  *          - in: path
@@ -162,11 +172,11 @@ const controller =  require('../controller/student-controller')
  *            schema:
  *              type: string
  *              required: true
- *              description: Deleted the teachers by id
+ *              description: Deleted the student by id
  *      
  *     responses:
  *          200:
- *              description: delete the details of teachers
+ *              description: delete the details of student
  
  */
 
