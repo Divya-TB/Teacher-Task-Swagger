@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 
 
-const controller =  require('../controller/controller')
+const controller =  require('../controller/student-controller')
 
 
 //router.param('id',controller.checkID)
@@ -19,27 +19,29 @@ const controller =  require('../controller/controller')
  *          Teachers:
  *              type: object
  *              required:
+ *                  - id
  *                  - name
  *                  - email
  *                  - phone
- *                  - subject
- *                  - Status
+ *                  - Address
+ *    
  *              properties:
+ *                  id:
+ *                      type: integer
  *                  name:
  *                      type: string
  *                  email:
  *                      type: string
  *                  phone:
  *                      type: integer
- *                  subject:
+ *                  Address:
  *                      type: string
- *                  Status:
- *                      type: string
+ *              
  */
 
 /**
  * @swagger
- * /api/teachers:
+ * /api/students:
  *  get:
  *     description:  get all the teachers
  *     responses:
@@ -57,7 +59,7 @@ const controller =  require('../controller/controller')
 
 /**
  * @swagger
- * /api/teachers/{id}:
+ * /api/students/{id}:
  *  get:
  *     description:  get all the teachers
  *    
@@ -81,7 +83,7 @@ const controller =  require('../controller/controller')
 
 /**
  * @swagger
- * /api/teacher/{select}:
+ * /api/students/{select}:
  *  get:
  *     description:  get all the teachers by active/inactive/name/subject
  *    
@@ -105,7 +107,7 @@ const controller =  require('../controller/controller')
 
 /**
  * @swagger
- * /api/teachers:
+ * /api/students:
  *  post:
  *     description:  create teacher details
  *     requestBody:
@@ -123,7 +125,7 @@ const controller =  require('../controller/controller')
 
 /**
  * @swagger
- * /api/teacher/update/{id}:
+ * /api/students/update/{id}:
  *  put:
  *     description:  update details of  teachers 
  *    
@@ -150,7 +152,7 @@ const controller =  require('../controller/controller')
 
 /**
  * @swagger
- * /api/teacher/delete/{id}:
+ * /api/students/delete/{id}:
  *  delete:
  *     description:  Delete the details of a teacher by Id
  *    
@@ -176,8 +178,8 @@ router
 
 
  router.get('/:id',controller.findid)
-router.get('/:select',controller.findact)
-router.put('/update/:id',controller.update)
+ router.get('/selects/:select',controller.findstu)
+ router.put('/update/:id',controller.update)
  router.delete('/delete/:id',controller.delete)
 
  module.exports = router
