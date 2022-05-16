@@ -1,12 +1,13 @@
 var userdb = require('../model/model')
 
+const query = require('../commonqueries/queries')
 
 //create and save new user
 
 exports.create = (req,res)=>{
     //validate request
     if(!req.body){
-        res.status(400).send({message:'content is empty'})
+        res.status(202).send({message:'content is empty'})
         return
     }
 
@@ -50,69 +51,39 @@ name:1
 //list all teachers that are active
 
 exports.findact =  (req,res)=>{
-     const regex = req.params.Status
-     const page = req.query.page * 1 || 1
-     const limit = req.query.limit *1 ||2
-     const skip = (page -1) * limit
-    userdb.find({Status:regex}).sort({
+     const regex = req.params.select
+     const {skip, limit} = server.pagination(req,res)
+    userdb.find({"$or":[{Status:regex},{name:regex},{subject:regex}]}).sort({
             name:1
     }).skip(skip).limit(limit).then(data=>{
    res.send(data)
     })
-    .catch(err=>{
-        res.status(500).send({meassage:err.message||"not found "})
+    .catch(err =>{
+        res.status(500).send({meassage:`Not found the data of ${regex}`})
     })
    
 
 
 }
 
-// get teacher by name or subject
-exports.findname =  (req,res)=>{
-   const names = req.params.name
-   userdb.find({name:names}).then(data=>{
-       res.send(data)
-   })
-   .catch(err=>{
-       res.status(500).send({meassage:err.message||"not found name"})
-   })
-  
-}
-//get teacher by subject
-
-exports.findsubject =  (req,res)=>{
-  
-  const subjects = req.params.subject
-     userdb.find({subject:subjects}).then(data=>{
-        if(!data){
-            return res.status(404).send({message:"cannot find the data"})
-       }else{
-            res.send(data)
-       }   
-     })
-     .catch(err=>{
-         res.status(500).send({meassage:err.message||"not found subject"})
-     })
-   
- }
 
 
 
 //get by id
 
+
 exports.findid =(req,res)=>{
     if(!req.body){
-        return res.status(400).send({meassage:"data  is empty"})
+        return res.status(400).send({meassage:"data to be updated is empty"})
     }
     const id = req.params.id
-    userdb.findById(id,req.body).then(data=>{
-        if(!data){
-            res.status(404).send({message:"cannot find the data"})
-       }else{
-           return res.send(data)
-       }
-
+    userdb.findById(id,req.body).then(data=>{ 
+            res.send(data)
     })
+    .catch(()=>{
+        query.checkID(req,res)
+    })
+    
 }
 
 
@@ -128,14 +99,10 @@ if(!req.body){
 const id = req.params.id
 userdb.findByIdAndUpdate(id,req.body,{useFindAndModify:false})
 .then(data=>{
-    if(!data){
-         res.status(404).send({message:"cannot update the data"})
-    }else{
-        return res.send(data)
-    }
+       res.send(data)
 })
- .catch(err=>{
-     res.status(500).send({message:"error"})
+ .catch(()=>{
+     query.checkID(req,res)
 })
 }
 
@@ -143,13 +110,11 @@ userdb.findByIdAndUpdate(id,req.body,{useFindAndModify:false})
 exports.delete = (req,res)=>{
 const id = req.params.id
 
-userdb.findByIdAndDelete(id).then(data=>{
-    if(!data){
-        res.status(404).send({meassage:`cannot delete with id ${id}.Maybe ID is wrong`})
+userdb.findByIdAndDelete(id).then(()=>{
 
-}
-else{
     res.send({meassage:"details was deleted successfully!"})
-}
+})
+.catch(()=>{
+    query.checkID(req,res)
 })
 }

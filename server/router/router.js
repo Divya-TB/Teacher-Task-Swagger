@@ -1,22 +1,183 @@
 const express = require('express')
-//const fs= require('fs')
-const route = express.Router()
 
-//const services = require('../services/render')
+const router = express.Router()
+
 
 const controller =  require('../controller/controller')
 
-//const file = fs.readFileSync('./dev-data/data/data.json','utf-8')
+
+//router.param('id',controller.checkID)
 
 
 
-route.post('/api/teachers',controller.create)
-route.get('/api/teachers',controller.find)
-route.get('/api/teachers/:id',controller.findid)
-route.get('/api/teacher/:Status',controller.findact)
-route.get('/api/teacher/name/:name',controller.findname)
-route.get('/api/teacher/subject/:subject',controller.findsubject)
-route.put('/api/teachers/update/:id',controller.update)
-route.delete('/api/teachers/delete/:id',controller.delete)
+//swagger
 
- module.exports = route
+/**
+ * @swagger
+ * components:
+ *      schemas:
+ *          Teachers:
+ *              type: object
+ *              required:
+ *                  - name
+ *                  - email
+ *                  - phone
+ *                  - subject
+ *                  - Status
+ *              properties:
+ *                  name:
+ *                      type: string
+ *                  email:
+ *                      type: string
+ *                  phone:
+ *                      type: integer
+ *                  subject:
+ *                      type: string
+ *                  Status:
+ *                      type: string
+ */
+
+/**
+ * @swagger
+ * /api/teachers:
+ *  get:
+ *     description:  get all the teachers
+ *     responses:
+ *      200:
+ *         description: list of teachers
+ *         content:
+ *             application/json:
+ *                   schema:
+ *                      type: array
+ *                      items:
+ *                          $ref: '#/components/schemas/Teachers'     
+ */
+
+
+
+/**
+ * @swagger
+ * /api/teachers/{id}:
+ *  get:
+ *     description:  get all the teachers
+ *    
+ *     parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: The teacher id
+ *     responses:
+ *          200:
+ *              description: list of teachers
+ *              content:
+ *                  application/json:
+ *                       schema:
+ *                          $ref: '#/components/schemas/Teachers'     
+ */
+
+
+
+/**
+ * @swagger
+ * /api/teacher/{select}:
+ *  get:
+ *     description:  get all the teachers by active/inactive/name/subject
+ *    
+ *     parameters:
+ *          - in: path
+ *            name: select
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: The teachers that are active or inactive                    
+ *     responses:
+ *          200:
+ *              description: list of teachers
+ *              content:
+ *                  application/json:
+ *                       schema:
+ *                          $ref: '#/components/schemas/Teachers'     
+ */
+
+
+
+/**
+ * @swagger
+ * /api/teachers:
+ *  post:
+ *     description:  create teacher details
+ *     requestBody:
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Teachers'
+ * 
+ *     responses:
+ *          200:
+ *              description: list of teachers
+ *              
+ */
+
+
+/**
+ * @swagger
+ * /api/teacher/update/{id}:
+ *  put:
+ *     description:  update details of  teachers 
+ *    
+ *     parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: Update the deatils
+ *     requestBody:
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#/components/schemas/Teachers'
+ *     responses:
+ *          200:
+ *              description: updated the details of teacher
+ *              content:
+ *                  application/json:
+ *                       schema:
+ *                          $ref: '#/components/schemas/Teachers'     
+ */
+
+/**
+ * @swagger
+ * /api/teacher/delete/{id}:
+ *  delete:
+ *     description:  Delete the details of a teacher by Id
+ *    
+ *     parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: string
+ *              required: true
+ *              description: Deleted the teachers by id
+ *      
+ *     responses:
+ *          200:
+ *              description: delete the details of teachers
+ 
+ */
+
+
+router
+    .route('/api/teachers')
+    .post(controller.create)
+    .get(controller.find)
+
+
+ router.get('/api/teachers/:id',controller.findid)
+router.get('/api/teacher/:select',controller.findact)
+router.put('/api/teacher/update/:id',controller.update)
+ router.delete('/api/teacher/delete/:id',controller.delete)
+
+ module.exports = router
