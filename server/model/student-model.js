@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { stringify } = require('nodemon/lib/utils')
+
 
 var schema = new mongoose.Schema({
     rollnumber:{

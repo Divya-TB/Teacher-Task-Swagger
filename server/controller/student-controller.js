@@ -117,7 +117,7 @@ exports.delete = (req,res)=>{
     
     students.findByIdAndDelete(id).then(()=>{
     
-        res.send({meassage:"details was deleted successfully!"})
+        res.send({meassage:"details was deleted successfully!!"})
     })
     .catch(()=>{ query.checkID(req,res)
     

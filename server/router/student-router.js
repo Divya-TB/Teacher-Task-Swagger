@@ -83,7 +83,7 @@ const controller =  require('../controller/student-controller')
 
 /**
  * @swagger
- * /api/students/{select}:
+ * /api/students/selects/{select}:
  *  get:
  *     description:  get all the teachers by active/inactive/name/subject
  *    
