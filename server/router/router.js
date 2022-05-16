@@ -81,7 +81,7 @@ const controller =  require('../controller/controller')
 
 /**
  * @swagger
- * /api/teacher/{select}:
+ * /api/teachers/selects/{select}:
  *  get:
  *     description:  get all the teachers by active/inactive/name/subject
  *    
@@ -91,7 +91,13 @@ const controller =  require('../controller/controller')
  *            schema:
  *              type: string
  *              required: true
- *              description: The teachers that are active or inactive                    
+ *              description: The teachers that are active or inactive
+ *          - in: query
+ *            name: page
+ *            schema:
+ *              type: integer
+ *              required: true
+ *                                
  *     responses:
  *          200:
  *              description: list of teachers
@@ -123,7 +129,7 @@ const controller =  require('../controller/controller')
 
 /**
  * @swagger
- * /api/teacher/update/{id}:
+ * /api/teachers/update/{id}:
  *  put:
  *     description:  update details of  teachers 
  *    
@@ -150,7 +156,7 @@ const controller =  require('../controller/controller')
 
 /**
  * @swagger
- * /api/teacher/delete/{id}:
+ * /api/teachers/delete/{id}:
  *  delete:
  *     description:  Delete the details of a teacher by Id
  *    
@@ -176,7 +182,7 @@ router
 
 
  router.get('/:id',controller.findid)
-router.get('/:select',controller.findact)
+router.get('/selects/:select',controller.findact)
 router.put('/update/:id',controller.update)
  router.delete('/delete/:id',controller.delete)
 
