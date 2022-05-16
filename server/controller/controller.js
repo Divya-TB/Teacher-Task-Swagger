@@ -52,7 +52,7 @@ name:1
 
 exports.findact =  (req,res)=>{
      const regex = req.params.select
-     const {skip, limit} = server.pagination(req,res)
+     const {skip, limit} = query.pagination(req,res)
     userdb.find({"$or":[{Status:regex},{name:regex},{subject:regex}]}).sort({
             name:1
     }).skip(skip).limit(limit).then(data=>{
