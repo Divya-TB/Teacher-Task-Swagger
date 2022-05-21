@@ -24,7 +24,7 @@ const controller =  require('../controller/student-controller')
  *                  - class
  *                  - email
  *                  - phone
- *                  - Address
+ *                  - address
  *                  
  *    
  *              properties:
@@ -38,16 +38,22 @@ const controller =  require('../controller/student-controller')
  *                      type: string
  *                  phone:
  *                      type: integer
- *                  Address:
+ *                  address:
  *                      type: string
  *              
  */
 
 /**
  * @swagger
- * /api/students:
+ * /api/students/getallstudents:
  *  get:
  *     description:  get all the Students
+ *     parameters:
+ *          - in: query
+ *            name: page number(pagination)
+ *            schema:
+ *              type: integer
+ *              required: true
  *     responses:
  *      200:
  *         description: list of teachers
@@ -89,20 +95,14 @@ const controller =  require('../controller/student-controller')
  * @swagger
  * /api/students/selects/{select}:
  *  get:
- *     description: get all the students by rollnumber
+ *     description: get all the students by rollnumber,name,class
  *     parameters:
  *          - in: path
- *            name: select
+ *            name: Search with Rollnumber,name,class
  *            schema:
  *              type: string
  *              required: true
  *              description: list of students 
- * 
- *          - in: query
- *            name: page
- *            schema:
- *              type: integer
- *              required: true
  *                                
  *     responses:
  *          200:
@@ -117,7 +117,7 @@ const controller =  require('../controller/student-controller')
 
 /**
  * @swagger
- * /api/students:
+ * /api/students/createstudents:
  *  post:
  *     description:  create students details
  *     requestBody:
@@ -182,13 +182,14 @@ const controller =  require('../controller/student-controller')
 
 
 router
-    .route('/')
+    .route('/createstudents')
     .post(controller.create)
-    .get(controller.find)
+router
+    .route('/getallstudents').get(controller.find)
 
 
- router.get('/:id',controller.findid)
- router.get('/selects/:select',controller.findstu)
+  router.get('/:id',controller.findid)
+  router.get('/selects/:select',controller.findstu)
  router.put('/update/:id',controller.update)
  router.delete('/delete/:id',controller.delete)
 

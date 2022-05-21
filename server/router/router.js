@@ -39,7 +39,7 @@ const controller =  require('../controller/controller')
 
 /**
  * @swagger
- * /api/teachers:
+ * /api/teachers/getlistofteachers:
  *  get:
  *     description:  get all the teachers
  *     responses:
@@ -87,7 +87,7 @@ const controller =  require('../controller/controller')
  *    
  *     parameters:
  *          - in: path
- *            name: select
+ *            name: get teachers by active/inactive,name,subject
  *            schema:
  *              type: string
  *              required: true
@@ -111,7 +111,7 @@ const controller =  require('../controller/controller')
 
 /**
  * @swagger
- * /api/teachers:
+ * /api/teachers/createteachers:
  *  post:
  *     description:  create teacher details
  *     requestBody:
@@ -176,9 +176,9 @@ const controller =  require('../controller/controller')
 
 
 router
-    .route('/')
+    .route('/createteachers')
     .post(controller.create)
-    .get(controller.find)
+router.route('/getlistofteachers').get(controller.find)
 
 
  router.get('/:id',controller.findid)
