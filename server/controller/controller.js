@@ -2,12 +2,16 @@ var userdb = require('../model/model')
 
 const query = require('../commonqueries/queries')
 
+const {deleted,findandupdate,findone} = require('../commonqueries/queries')
+
+const {APIFeatures} = require('../commonqueries/common')
+
 //create and save new user
 
 exports.create = (req,res)=>{
     //validate request
     if(!req.body){
-        res.status(202).send({message:'content is empty'})
+        res.status(400).send({message:'content is empty'})
         return
     }
 
@@ -27,52 +31,51 @@ exports.create = (req,res)=>{
         res.send(data)
     })
     .catch(err=>{
-        res.status(500).send({message:err.meassage||"some error occured while creating a create operation"})
+        res.status(500).send({message:err.message||"some error occured while creating a create operation"})
     })
 
 }
 
 // retrieve and return all users
 
-exports.find=(req,res)=>{
-userdb.find().sort({
-name:1
-}).then(data=>{
-    res.send(data)
-})
-.catch(err=>{
-    res.status(500).send({meassage:err.message||"not found "})
-})
-}
+exports.find = async(req,res)=>{
+    if(!req.body){
+        return res.status(400).send({meassage:"data to be updated is empty"})
+    }
+    try{
 
+        const features= new APIFeatures(userdb.find(),req.query).sort().paginate()
 
+        const data = await features.query
 
-
-//list all teachers that are active
-
-exports.findact =  (req,res)=>{
-     const regex = req.params.select
-     const {skip, limit} = query.pagination(req,res)
-    userdb.find({"$or":[{Status:regex},{name:regex},{subject:regex}]}).sort({
-            name:1
-    }).skip(skip).limit(limit).then(data=>{
-   res.send(data)
-    })
-    .catch(err =>{
-        res.status(500).send({meassage:`Not found the data of ${regex}`})
-    })
+        if(data){
+        res.status(200).json({
+            message:"found the dtails of teachers",
+            list:data
+        })
+    }
+    }
    
-
+     
+    catch(err){
+        
+        res.status(500).json({message:err.messsage||'no content'})
+    }
 
 }
 
+//get the detils by active/inactive/name/subject
 
+exports.findact =  async (req,res)=>{
+     const regex = req.params.select
+     var query = {"$or":[{name: regex},{Status:regex},{subject:regex}]}
+     await findone(query,req,res)
+}
 
 
 //get by id
 
-
-exports.findid =(req,res)=>{
+exports.findid=(req,res)=>{
     if(!req.body){
         return res.status(400).send({meassage:"data to be updated is empty"})
     }
@@ -80,41 +83,30 @@ exports.findid =(req,res)=>{
     userdb.findById(id,req.body).then(data=>{ 
             res.send(data)
     })
-    .catch(()=>{
-        query.checkID(req,res)
+    .catch(err=>{
+        res.send(err)
     })
     
 }
 
 
 
-
-
 //update a user by user id
 
-exports.update = (req,res)=>{
+exports.update = async (req,res)=>{
 if(!req.body){
     return res.status(400).send({meassage:"data to be updated is empty"})
 }
 const id = req.params.id
-userdb.findByIdAndUpdate(id,req.body,{useFindAndModify:false})
-.then(data=>{
-       res.send(data)
-})
- .catch(()=>{
-     query.checkID(req,res)
-})
+ await findandupdate(id,req,res)
 }
 
-//delete a user 
-exports.delete = (req,res)=>{
-const id = req.params.id
+//delete the content 
+exports.delete = async (req,res)=>{
+       await deleted(req.params.id,res )
+    
+   }
 
-userdb.findByIdAndDelete(id).then(()=>{
 
-    res.send({meassage:"details was deleted successfully!"})
-})
-.catch(()=>{
-    query.checkID(req,res)
-})
-}
+
+
