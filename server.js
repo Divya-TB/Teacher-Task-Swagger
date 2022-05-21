@@ -22,7 +22,7 @@ const options ={
         }],
        
     },
-    apis: ["./server/router/router.js","./server/router/student-router.js"]
+    apis: ["./server/router/router.js","./server/router/student-router.js","./server/router/auth-router.js"]
 }
 
 const specs = swaggerjsDoc(options)
@@ -46,12 +46,14 @@ const connectDB = async()=>{
     try{
         const con = await mongoose.connect(DB,{
             useNewUrlParser :true,
+           
+      
               
         })
         console.log(`mongodb connected : ${con.connection.host}`)
     }
     catch(err){
-        console.lo("failed the connection")
+        console.log("failed the connection")
         process.exit(1)
     }
 }
@@ -69,7 +71,7 @@ app.use(bodyparser.urlencoded({extended:true}))
 app.use(bodyparser.json())
 
 //route
-
+app.use('/api/admin',require('./server/router/auth-router'))
 app.use('/api/teachers',require('./server/router/router'))
 app.use('/api/students',require('./server/router/student-router'))
 
